@@ -1,0 +1,36 @@
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: demo-api1-gateway
+  namespace: api 
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "dev.demo-api1.127.0.0.1.sslip.io"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: demo-api1-vs
+  namespace: api 
+spec:
+  hosts:
+  - "dev.demo-api1.127.0.0.1.sslip.io"
+  gateways:
+  - demo-api1-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: demo-api1-active
+        port:
+          number: 8080

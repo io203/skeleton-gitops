@@ -1,10 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# - demo-api1-ingress.yaml
+
 resources:
 - demo-api1-svc.yaml
 - demo-api1-rollout.yaml
+- ingress-demo-api1.yaml
 
 images:
 - name: saturn203/demo-api1

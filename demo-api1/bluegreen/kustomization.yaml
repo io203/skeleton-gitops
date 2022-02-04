@@ -5,8 +5,8 @@ resources:
 - demo-api1-rollout.yaml
 - demo-api1-svc-active.yaml
 - demo-api1-svc-preview.yaml
-# - demo-api1-ingress-preview.yaml
-# - demo-api1-ingress.yaml
+- ingress-preview-demo-api1.yaml
+- ingress-demo-api1.yaml
 
 images:
 - name: saturn203/demo-api1
