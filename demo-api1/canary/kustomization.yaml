@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- demo-api1-ingress.yaml
+# - demo-api1-ingress.yaml
 - demo-api1-svc.yaml
 - demo-api1-rollout.yaml
 
@@ -10,4 +10,5 @@ resources:
 
 images:
 - name: saturn203/demo-api1
-  newTag: RB0.0.5
+  newTag: "RB0.0.5"
+
