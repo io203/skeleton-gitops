@@ -1,0 +1,16 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata: 
+  labels:
+    app: demo-api1
+  name: demo-api1-httpproxy
+  namespace: api
+spec: 
+  virtualhost:
+    fqdn: demo-api1.127.0.0.1.sslip.io
+  routes: 
+    - conditions:
+      - prefix: /
+      services:
+        - name: demo-api1-svc
+          port: 8080

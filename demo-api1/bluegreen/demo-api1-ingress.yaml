@@ -1,0 +1,29 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-api1-ingress
+  namespace: api
+spec:
+  rules:
+  - host: "demo-api1.127.0.0.1.sslip.io"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-api1-active
+            port:
+              number: 8081
+  - host: "preview.demo-api1.127.0.0.1.sslip.io"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demo-api1-preview
+            port:
+              number: 9009
+

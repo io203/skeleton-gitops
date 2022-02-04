@@ -1,0 +1,33 @@
+
+apiVersion: argoproj.io/v1alpha1  
+kind: Rollout 
+
+metadata:
+  name: demo-api1-rollout
+  namespace: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-api1
+  template:
+    metadata:
+      labels:
+        app: demo-api1
+    spec:
+      containers:
+      - name: demo-api1
+        image: saturn203/demo-api1
+        ports:
+        - name: http
+          containerPort: 8080
+  minReadySeconds: 30
+  revisionHistoryLimit: 3
+  strategy:
+  # ----- Everything above this comment are the same as a deployment -----
+    blueGreen: # A new field for the Blue Green strategy options
+      previewService: demo-api1-preview # Reference to a service
+      activeService: demo-api1-active # Reference to a service
+      autoPromotionEnabled: false
+      previewReplicaCount: 1
+      scaleDownDelaySeconds: 60  

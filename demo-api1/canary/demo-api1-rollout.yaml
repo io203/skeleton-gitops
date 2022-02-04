@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1 
+kind: Rollout 
+metadata:
+  name: demo-api1-rollout
+  namespace: api
+  labels:
+    app: demo-api1
+    
+   
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: demo-api1
+  template:
+    metadata:
+      labels:
+        app: demo-api1
+         
+    spec:
+      containers:
+      - name: demo-api1
+        image: saturn203/demo-api1
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          
+  minReadySeconds: 30
+  revisionHistoryLimit: 3
+  strategy:
+    canary: 
+          steps:
+          - setWeight: 25
+          - pause: {}
+          - setWeight: 50
+          - pause: {} 
+          - setWeight: 75
+          - pause: {}
+         
+          
+
+
+  
+        
