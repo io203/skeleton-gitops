@@ -10,6 +10,4 @@ resources:
 
 images:
 - name: saturn203/demo-api1
-  newTag: "prod-slime-v1.7"
-
-
+  newTag: RB0.0.5
