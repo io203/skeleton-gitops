@@ -6,8 +6,6 @@ resources:
 - demo-api1-svc.yaml
 - demo-api1-rollout.yaml
 
-
-
 images:
 - name: saturn203/demo-api1
   newTag: "RB0.0.5"
