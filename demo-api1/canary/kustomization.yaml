@@ -9,4 +9,4 @@ resources:
 
 images:
 - name: saturn203/demo-api1
-  newTag: RB0.0.15
+  newTag: RB0.0.22
