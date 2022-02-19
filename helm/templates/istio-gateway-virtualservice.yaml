@@ -1,0 +1,67 @@
+{{- if .Values.istio.enabled -}}
+{{- $serviceName := .Values.service.name -}}
+{{- $servicePort := .Values.service.port -}}
+{{- $adminPort := .Values.service.adminPort -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "demo-api1.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "demo-api1.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "demo-api1.chart" . }}
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    {{- if eq .Values.ingress.proto "https" }}
+    tls:
+      httpsRedirect: true
+    {{- end }}
+    hosts:
+    - "{{ .Values.ingress.host }}.{{ .Values.ingress.domain }}"
+  {{- if eq .Values.ingress.proto "https" }}
+  - hosts:
+    - "{{ .Values.ingress.host }}.{{ .Values.ingress.domain }}"
+    port:
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+  {{- end }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "demo-api1.fullname" . }}
+spec:
+  hosts:
+  {{- if eq .Values.ingress.domain "minikube.local" }}
+  - "*"
+  {{- else }}
+  - "{{ .Values.ingress.host }}.{{ .Values.ingress.domain }}"
+  {{- end }}
+  gateways:
+  - {{ include "demo-api1.fullname" . }}
+  http:
+ 
+  - match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: "{{ .Values.istio.destination.host }}.{{ $.Release.Namespace }}.svc.cluster.local"
+        port:
+          number: {{ .Values.istio.destination.port }}
+        
+
+ 
+{{- end -}}
